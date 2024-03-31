@@ -1,7 +1,7 @@
-// #include <SoftwareSerial.h>
-// #include <ESP8266WiFi.h>
+#include <SoftwareSerial.h>
+#include <ESP8266WiFi.h>
 
-// SoftwareSerial NodeMCU(D2,D3);
+SoftwareSerial NodeMCU(D2,D3);
 
 // void setup(){
 // 	Serial.begin(9600);
@@ -23,9 +23,13 @@
 #define WIFI_PSWD "123456789"
 
 ESP8266WebServer server(80);
+int dir = 0;
 
 void setup() {
   Serial.begin(9600);
+  NodeMCU.begin(4800);
+	pinMode(D2,INPUT);
+	pinMode(D3,OUTPUT);
   WiFi.begin(WIFI_SSID, WIFI_PSWD);
   Serial.print("Connecting to ");
   Serial.print(WIFI_SSID);
@@ -44,12 +48,14 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.println();
 
-  server.on("/send", HTTP_GET, []() {
-    if (server.hasArg("data")) {
-      String data = server.arg("data");
-      Serial.print("Received data: ");
-      Serial.println(data);
-      server.send(200, "text/plain", "Data received");
+  server.on("/command", HTTP_GET, []() {
+    if (server.hasArg("dir")) {
+      dir = server.arg("dir").toInt();
+      Serial.print("Received command: ");
+      Serial.println(dir); 
+      NodeMCU.print(dir);
+      NodeMCU.println("\n");
+      server.send(200, "text/plain", "Command received");
     } else {
       server.send(400, "text/plain", "Bad Request");
     }

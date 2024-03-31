@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP8266 Data Sender</title>
+    <title>ESP8266 Control</title>
     <style>
         /* Add your CSS styles here */
     </style>
 </head>
 <body>
-    <h1>ESP8266 Data Sender</h1>
-    <input type="text" id="dataInput" placeholder="Enter data">
-    <button onclick="sendData()">Send Data</button>
+    <h1>ESP8266 Control</h1>
+    <button onclick="sendCommand(1)">Up</button>
+    <button onclick="sendCommand(2)">Down</button>
+    <button onclick="sendCommand(3)">Left</button>
+    <button onclick="sendCommand(4)">Right</button>
 
     <script>
-        function sendData() {
-            var data = document.getElementById("dataInput").value;
+        function sendCommand(direction) {
             var xhr = new XMLHttpRequest();
-            xhr.open("GET", "http://192.168.38.154/send?data=" + data, true);
+            xhr.open("GET", "http://192.168.38.154/command?dir=" + direction, true);
             xhr.send();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
                     if (xhr.status == 200) {
-                        console.log("Data sent successfully");
+                        console.log("Command sent successfully");
                     } else {
-                        console.error("Failed to send data");
+                        console.error("Failed to send command");
                     }
                 }
             };
