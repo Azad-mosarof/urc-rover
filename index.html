@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP8266 Data Sender</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>ESP8266 Data Sender</h1>
+    <input type="text" id="dataInput" placeholder="Enter data">
+    <button onclick="sendData()">Send Data</button>
+
+    <script>
+        function sendData() {
+            var data = document.getElementById("dataInput").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://192.168.38.154/send?data=" + data, true);
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    if (xhr.status == 200) {
+                        console.log("Data sent successfully");
+                    } else {
+                        console.error("Failed to send data");
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+</html>
